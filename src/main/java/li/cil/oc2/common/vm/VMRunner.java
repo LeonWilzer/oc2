@@ -12,7 +12,8 @@ import li.cil.oc2.common.bus.RPCDeviceBusAdapter;
 import li.cil.oc2.common.vm.context.global.GlobalVMContext;
 import li.cil.sedna.riscv.R5Board;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.ExecutionException;
@@ -131,7 +132,7 @@ public class VMRunner implements Runnable {
                 context.postEvent(new VMInitializingEvent(board.getDefaultProgramStart()));
             } catch (final VMInitializationException e) {
                 board.setRunning(false);
-                runtimeError = e.getErrorMessage().orElse(new TranslatableComponent(Constants.COMPUTER_ERROR_UNKNOWN));
+                runtimeError = e.getErrorMessage().orElse(MutableComponent.create(new TranslatableContents(Constants.COMPUTER_ERROR_UNKNOWN)));
                 return;
             }
         }

@@ -13,7 +13,6 @@ import li.cil.oc2.common.network.message.BusInterfaceNameMessage;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.phys.Vec3;
 import org.lwjgl.glfw.GLFW;
 

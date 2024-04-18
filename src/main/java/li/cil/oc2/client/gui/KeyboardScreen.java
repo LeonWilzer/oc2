@@ -14,31 +14,37 @@ import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.gui.ForgeIngameGui;
-import net.minecraftforge.client.gui.OverlayRegistry;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.glfw.GLFW;
-
-import java.util.Random;
 
 public final class KeyboardScreen extends Screen {
     private static final int BORDER_SIZE = 4;
     private static final float ARM_SWING_RATE = 0.8f;
     private static final int BORDER_COLOR = 0xFFFFFFFF;
 
-    private static final TranslatableComponent CLOSE_INFO = new TranslatableComponent("gui.oc2.keyboard.close_info");
+    private static final Component CLOSE_INFO = MutableComponent.create(new TranslatableContents("gui.oc2.keyboard.close_info"));
 
     ///////////////////////////////////////////////////////////////////
 
     private final KeyboardBlockEntity keyboard;
+    private final Hotbar hotbar;
 
     ///////////////////////////////////////////////////////////////////
 
     public KeyboardScreen(final KeyboardBlockEntity keyboard) {
         super(Items.KEYBOARD.get().getDescription());
         this.keyboard = keyboard;
+        this.hotbar = new Hotbar();
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -52,7 +58,7 @@ public final class KeyboardScreen extends Screen {
         grabMouse();
 
         // Disable hotbar since we don't need it here, and it just blocks screen space.
-        OverlayRegistry.enableOverlay(ForgeIngameGui.HOTBAR_ELEMENT, false);
+        hotbar.setVisible(false);
     }
 
     @Override
@@ -109,10 +115,16 @@ public final class KeyboardScreen extends Screen {
     public void removed() {
         super.removed();
 
-        OverlayRegistry.enableOverlay(ForgeIngameGui.HOTBAR_ELEMENT, true);
+        hotbar.setVisible(true);
     }
 
     ///////////////////////////////////////////////////////////////////
+
+    @SubscribeEvent
+    public void gettingHotbarOverlay(RegisterGuiOverlaysEvent event)
+    {
+        event.registerBelowAll(VanillaGuiOverlay.HOTBAR.id().toString(), hotbar);
+    }
 
     private void renderBorderOverlay(final PoseStack stack) {
         blitQuad(stack, BORDER_SIZE, BORDER_SIZE, width - BORDER_SIZE, BORDER_SIZE * 2, BORDER_COLOR);
@@ -155,7 +167,7 @@ public final class KeyboardScreen extends Screen {
             return;
         }
 
-        final Random random = player.getRandom();
+        final RandomSource random = player.getRandom();
         if (random.nextFloat() < ARM_SWING_RATE) {
             return;
         }
@@ -168,5 +180,31 @@ public final class KeyboardScreen extends Screen {
         }
 
         player.swing(handToSwing);
+    }
+
+    private class Hotbar implements  IGuiOverlay
+    {
+        private boolean isVisible;
+
+        public Hotbar()
+        {
+            setVisible(true);
+        }
+
+        @Override
+        public void render(final ForgeGui gui, final PoseStack poseStack, final float partialTick, final int screenWidth, final int screenHeight) {
+            if(isVisible())
+            {
+                VanillaGuiOverlay.HOTBAR.type().overlay().render(gui, poseStack, partialTick, screenWidth, screenHeight);
+            }
+        }
+
+        public boolean isVisible() {
+            return isVisible;
+        }
+
+        public void setVisible(boolean visible) {
+            isVisible = visible;
+        }
     }
 }

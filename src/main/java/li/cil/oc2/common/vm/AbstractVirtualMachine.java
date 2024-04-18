@@ -17,7 +17,8 @@ import li.cil.sedna.api.memory.MemoryAccessException;
 import li.cil.sedna.riscv.R5Board;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.apache.logging.log4j.LogManager;
@@ -141,11 +142,11 @@ public abstract class AbstractVirtualMachine implements VirtualMachine {
         switch (busState) {
             case SCAN_PENDING:
             case INCOMPLETE:
-                return new TranslatableComponent(Constants.COMPUTER_BUS_STATE_INCOMPLETE);
+                return MutableComponent.create(new TranslatableContents(Constants.COMPUTER_BUS_STATE_INCOMPLETE));
             case TOO_COMPLEX:
-                return new TranslatableComponent(Constants.COMPUTER_BUS_STATE_TOO_COMPLEX);
+                return MutableComponent.create(new TranslatableContents(Constants.COMPUTER_BUS_STATE_TOO_COMPLEX));
             case MULTIPLE_CONTROLLERS:
-                return new TranslatableComponent(Constants.COMPUTER_BUS_STATE_MULTIPLE_CONTROLLERS);
+                return MutableComponent.create(new TranslatableContents(Constants.COMPUTER_BUS_STATE_MULTIPLE_CONTROLLERS));
             case READY:
                 switch (runState) {
                     case STOPPED:

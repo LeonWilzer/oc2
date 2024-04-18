@@ -16,7 +16,6 @@ import li.cil.oc2.api.API;
 import li.cil.oc2.common.block.Blocks;
 import li.cil.oc2.common.item.Items;
 import li.cil.oc2.common.util.RegistryUtils;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;

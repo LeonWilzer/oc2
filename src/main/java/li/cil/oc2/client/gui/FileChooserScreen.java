@@ -10,9 +10,9 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.contents.LiteralContents;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -157,7 +157,7 @@ public final class FileChooserScreen extends Screen {
         final int buttonTop = fileNameTop + TEXT_FIELD_HEIGHT + WIDGET_SPACING;
         final int buttonCount = 2;
         final int buttonWidth = widgetsWidth / buttonCount - (buttonCount - 1) * WIDGET_SPACING;
-        okButton = addRenderableWidget(new Button(MARGIN, buttonTop, buttonWidth, BUTTON_HEIGHT, TextComponent.EMPTY, this::handleOkPressed));
+        okButton = addRenderableWidget(new Button(MARGIN, buttonTop, buttonWidth, BUTTON_HEIGHT, MutableComponent.create(LiteralContents.EMPTY), this::handleOkPressed));
         addRenderableWidget(new Button(MARGIN + buttonWidth + WIDGET_SPACING, buttonTop, buttonWidth, BUTTON_HEIGHT, CANCEL_TEXT, this::handleCancelPressed));
 
         fileList.refreshFiles(directory);

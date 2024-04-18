@@ -7,7 +7,8 @@ import li.cil.oc2.common.bus.CommonDeviceBusController;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -19,10 +20,10 @@ import net.minecraftforge.network.NetworkHooks;
 
 public final class ComputerTerminalContainer extends AbstractComputerContainer {
     public static void createServer(final ComputerBlockEntity computer, final IEnergyStorage energy, final CommonDeviceBusController busController, final ServerPlayer player) {
-        NetworkHooks.openGui(player, new MenuProvider() {
+        NetworkHooks.openScreen(player, new MenuProvider() {
             @Override
             public Component getDisplayName() {
-                return new TranslatableComponent(computer.getBlockState().getBlock().getDescriptionId());
+                return MutableComponent.create(new TranslatableContents(computer.getBlockState().getBlock().getDescriptionId()));
             }
 
             @Override

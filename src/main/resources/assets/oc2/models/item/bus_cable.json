@@ -1,5 +1,6 @@
 {
   "parent": "oc2:block/cable_straight",
+  "render_type": "minecraft:cutout",
   "display": {
     "gui": {
       "rotation": [
